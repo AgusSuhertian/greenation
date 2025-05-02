@@ -1,0 +1,11 @@
+<h2>Fauna</h2>
+<div *ngIf="faunaData; else loading">
+  <div *ngFor="let item of faunaData">
+    <h3>{{ item.species }}</h3>
+    <p>{{ item.description }}</p>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading fauna data...</p>
+</ng-template>

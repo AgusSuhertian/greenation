@@ -1,0 +1,11 @@
+<h2>Flora</h2>
+<div *ngIf="floraData; else loading">
+  <div *ngFor="let item of floraData">
+    <h3>{{ item.species }}</h3>
+    <p>{{ item.description }}</p>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading flora data...</p>
+</ng-template>

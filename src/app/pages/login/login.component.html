@@ -1,0 +1,22 @@
+<div class="login-container">
+  <form (submit)="onSubmit($event)" class="login-form">
+    <h2>Login</h2>
+    
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input [(ngModel)]="username" name="username" id="username" type="text" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input [(ngModel)]="password" name="password" id="password" type="password" required />
+    </div>
+
+    <button type="submit">Login</button>
+
+    <p class="register-link">
+      Belum punya akun? <a (click)="goToRegister()" style="cursor:pointer;">Daftar di sini</a>
+    </p>
+  
+  </form>
+</div>
