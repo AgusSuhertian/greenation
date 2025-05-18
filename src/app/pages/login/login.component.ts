@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../auth.service';
+
 @Component({
-  standalone: true, 
+  standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -12,12 +14,14 @@ export class LoginComponent {
   username = '';
   password = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router, // Router sudah diinject
+    private authService: AuthService // Inject AuthService
+  ) {}
 
   onSubmit(event: Event) {
     event.preventDefault();
 
-    // Periksa apakah username dan password sudah terisi
     if (!this.username || !this.password) {
       alert('Username dan password wajib diisi');
       return;
@@ -31,8 +35,11 @@ export class LoginComponent {
     );
 
     if (matched) {
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/home']);
+      // Panggil authService.login()
+      // Biarkan AuthService yang mengatur localStorage dan navigasi
+      this.authService.login('/home'); // Atau ke returnUrl jika ada
+      // localStorage.setItem('isLoggedIn', 'true'); // Tidak perlu lagi di sini
+      // this.router.navigate(['/home']); // Tidak perlu lagi di sini
     } else {
       alert('Username atau password salah');
     }
@@ -42,9 +49,5 @@ export class LoginComponent {
     this.router.navigate(['/register']);
   }
 
-  checkUsers() {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    console.log('Data users dari localStorage:', users);
-    alert(JSON.stringify(users, null, 2));
-  }
+  // ... (checkUsers bisa tetap ada untuk debugging Anda)
 }

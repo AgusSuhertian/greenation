@@ -1,11 +1,62 @@
-<h2>Fauna</h2>
-<div *ngIf="faunaData; else loading">
-  <div *ngFor="let item of faunaData">
-    <h3>{{ item.species }}</h3>
-    <p>{{ item.description }}</p>
+<div class="fauna-container">
+  <h1 class="page-title">Ensiklopedia Fauna</h1>
+  <p class="page-subtitle">Temukan informasi berbagai jenis hewan dari seluruh dunia.</p>
+
+  <div class="search-section">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Masukkan nama hewan (misal: Singa, Gajah)"
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="performSearch()"
+    />
+    <button class="search-button" (click)="performSearch()" [disabled]="isLoading">
+      {{ isLoading ? 'Mencari...' : 'Cari' }}
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Sedang memuat data...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && faunaList.length === 0 && hasSearched" class="no-results-message">
+    <p>Tidak ada data fauna yang cocok dengan pencarian Anda.</p>
+  </div>
+
+  <div class="fauna-grid" *ngIf="!isLoading && !errorMessage && faunaList.length > 0">
+    <a *ngFor="let hewan of faunaList" [routerLink]="['/fauna', hewan.id]" class="fauna-card-link">
+      <article class="fauna-card">
+        <div class="fauna-card__image-container">
+          <img [src]="hewan.imageUrl" [alt]="hewan.namaUmum" class="fauna-card__image">
+        </div>
+        <div class="fauna-card__content">
+          <h3 class="fauna-card__name">{{ hewan.namaUmum }}</h3>
+          <p class="fauna-card__scientific-name"><em>{{ hewan.namaIlmiah }}</em></p>
+
+          <div class="fauna-card__meta" *ngIf="hewan.statusKonservasi && hewan.statusKonservasi.toLowerCase() !== 'tidak diketahui'">
+            <span class="fauna-card__status"
+                  [ngClass]="{
+                    'fauna-card__status--kritis': hewan.statusKonservasi?.toLowerCase().includes('kritis') || hewan.statusKonservasi?.toLowerCase().includes('critically endangered'),
+                    'fauna-card__status--terancam': hewan.statusKonservasi?.toLowerCase().includes('terancam') || hewan.statusKonservasi?.toLowerCase().includes('endangered'),
+                    'fauna-card__status--rentan': hewan.statusKonservasi?.toLowerCase().includes('rentan') || hewan.statusKonservasi?.toLowerCase().includes('vulnerable'),
+                    'fauna-card__status--hampir-terancam': hewan.statusKonservasi?.toLowerCase().includes('hampir terancam') || hewan.statusKonservasi?.toLowerCase().includes('near threatened'),
+                    'fauna-card__status--resiko-rendah': hewan.statusKonservasi?.toLowerCase().includes('resiko rendah') || hewan.statusKonservasi?.toLowerCase().includes('least concern')
+                  }">
+              {{ hewan.statusKonservasi.split('(')[0].trim() }} </span>
+          </div>
+
+          <p class="fauna-card__description" *ngIf="hewan.deskripsiSingkat">
+            {{ hewan.deskripsiSingkat }}
+            </p>
+        </div>
+        <div class="fauna-card__footer">
+          <span class="fauna-card__cta">Lihat Detail &rarr;</span>
+        </div>
+      </article>
+    </a>
   </div>
 </div>
-
-<ng-template #loading>
-  <p>Loading fauna data...</p>
-</ng-template>

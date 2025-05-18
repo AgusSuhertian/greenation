@@ -1,0 +1,27 @@
+<div class="detail-container"> <a routerLink="/flora" class="back-button">&larr; Kembali ke Daftar Flora</a>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Memuat detail flora...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="flora && !isLoading && !errorMessage" class="flora-detail-content"> <h1 class="item-name">{{ flora.namaUmum }}</h1> <p class="scientific-name"><em>{{ flora.namaIlmiah }}</em></p>
+
+    <div class="image-container">
+      <img [src]="flora.imageUrl" [alt]="flora.namaUmum" class="item-image-detail"> </div>
+
+    <div class="info-section">
+      <h2>Deskripsi</h2>
+      <p class="description" [innerHTML]="flora.deskripsiSingkat || 'Informasi deskripsi tidak tersedia.'"></p>
+    </div>
+
+    <div class="info-section" *ngIf="flora.keluarga && flora.keluarga !== 'Tidak diketahui'">
+      <h2>Famili</h2>
+      <p>{{ flora.keluarga }}</p>
+    </div>
+
+    </div>
+</div>

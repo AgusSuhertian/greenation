@@ -1,0 +1,11 @@
+<nav class="navbar">
+    <div class="logo">Greenaction</div>
+    <ul class="nav-links">
+      <li><a routerLink="/home">Home</a></li>
+      <li><a routerLink="/flora">Flora</a></li>
+      <li><a routerLink="/fauna">Fauna</a></li>
+      <li *ngIf="!isLoggedIn()"><a routerLink="/login">Login</a></li>
+      <li *ngIf="isLoggedIn()"><a href="#" (click)="logout()">Logout</a></li>
+    </ul>
+  </nav>
+  

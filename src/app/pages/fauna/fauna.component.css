@@ -1,0 +1,216 @@
+/* src/app/pages/fauna/fauna.component.css */
+
+/* Style untuk container utama, judul, dan pencarian bisa tetap sama
+   jika Anda sudah puas dengan yang sebelumnya. Saya akan fokus pada
+   styling untuk .fauna-grid dan .fauna-card yang baru. */
+
+.fauna-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Open Sans', 'Lato', 'Roboto', sans-serif; /* Contoh font dari panduan */
+}
+
+.page-title {
+  text-align: center;
+  color: #2c3e50; /* Warna gelap untuk judul */
+  margin-bottom: 10px;
+  font-weight: 700; /* Lebih tebal */
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #757575; /* Abu-abu untuk subjudul */
+  margin-bottom: 30px;
+}
+
+.search-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 12px 15px;
+  border: 1px solid #E0E0E0; 
+  border-radius: 8px;
+  font-size: 1em;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #66BB6A; 
+  box-shadow: 0 0 0 0.2rem rgba(102, 187, 106, 0.25);
+}
+
+.search-button {
+  padding: 12px 20px;
+  background-color: #4CAF50; 
+  color: white;
+  border: none;
+  border-radius: 8px; 
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #388E3C; 
+}
+
+.search-button:disabled {
+  background-color: #BDBDBD; 
+  cursor: not-allowed;
+}
+
+.loading-indicator, .error-message, .no-results-message {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.1em;
+  color: #757575;
+}
+
+.error-message {
+  color: #D32F2F; 
+}
+
+
+.fauna-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  gap: 25px; 
+}
+
+
+.fauna-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block; 
+  border-radius: 12px; 
+  transition: box-shadow 0.3s ease; 
+}
+
+.fauna-card-link:hover {
+   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.12); 
+}
+
+
+.fauna-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08), 0 6px 12px rgba(0, 0, 0, 0.06); 
+  transition: transform 0.3s ease; 
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+}
+
+.fauna-card-link:hover .fauna-card {
+  transform: translateY(-4px); 
+}
+
+.fauna-card__image-container {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background-color: #EEEEEE; 
+}
+
+.fauna-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease-out;
+}
+
+.fauna-card-link:hover .fauna-card__image {
+  transform: scale(1.05); 
+}
+
+.fauna-card__content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fauna-card__name {
+  font-size: 1.4em; 
+  font-weight: 700;
+  color: #2E7D32; 
+  margin-top: 0;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.fauna-card__scientific-name {
+  font-size: 0.85em; 
+  color: #757575;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.fauna-card__meta {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.fauna-card__status {
+  font-size: 0.7em; 
+  font-weight: 700; 
+  padding: 3px 8px;
+  border-radius: 12px; 
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+
+.fauna-card__status--kritis { background-color: #C62828;  }
+.fauna-card__status--terancam { background-color: #EF6C00;  }
+.fauna-card__status--rentan { background-color: #F9A825;  }
+.fauna-card__status--hampir-terancam { background-color: #7CB342;  }
+.fauna-card__status--resiko-rendah { background-color: #43A047; }
+.fauna-card__status:not([class*="--"]) { 
+    background-color: #757575; 
+}
+
+
+.fauna-card__description {
+  font-size: 0.9em;
+  color: #424242;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.5em * 3); 
+  flex-grow: 1;
+}
+
+.fauna-card__footer {
+  padding: 0 20px 15px 20px; 
+  margin-top: auto; 
+  text-align: right; 
+}
+
+.fauna-card__cta {
+  font-size: 0.85em;
+  font-weight: 700;
+  color: #1976D2; /* Biru */
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.fauna-card-link:hover .fauna-card__cta {
+  color: #2E7D32; 
+  }

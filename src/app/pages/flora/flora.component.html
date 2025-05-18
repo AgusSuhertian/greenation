@@ -1,11 +1,55 @@
-<h2>Flora</h2>
-<div *ngIf="floraData; else loading">
-  <div *ngFor="let item of floraData">
-    <h3>{{ item.species }}</h3>
-    <p>{{ item.description }}</p>
+<div class="flora-container"> <h1 class="page-title">Ensiklopedia Flora</h1>
+  <p class="page-subtitle">Temukan informasi berbagai jenis tumbuhan dari seluruh dunia.</p>
+
+  <div class="search-section">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Masukkan nama tumbuhan (misal: Mawar, Anggrek)"
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="performSearch()"
+    />
+    <button class="search-button" (click)="performSearch()" [disabled]="isLoading">
+      {{ isLoading ? 'Mencari...' : 'Cari' }}
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Sedang memuat data...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && floraList.length === 0 && hasSearched" class="no-results-message">
+    <p>Tidak ada data flora yang cocok dengan pencarian Anda.</p>
+  </div>
+
+  <div class="flora-grid" *ngIf="!isLoading && !errorMessage && floraList.length > 0">
+    <a *ngFor="let tumbuhan of floraList" [routerLink]="['/flora', tumbuhan.id]" class="flora-card-link">
+      <article class="flora-card">
+        <div class="flora-card__image-container">
+          <img [src]="tumbuhan.imageUrl" [alt]="tumbuhan.namaUmum" class="flora-card__image">
+        </div>
+        <div class="flora-card__content">
+          <h3 class="flora-card__name">{{ tumbuhan.namaUmum }}</h3>
+          <p class="flora-card__scientific-name"><em>{{ tumbuhan.namaIlmiah }}</em></p>
+
+          <div class="flora-card__meta" *ngIf="tumbuhan.keluarga && tumbuhan.keluarga.toLowerCase() !== 'tidak diketahui'">
+            <span class="flora-card__family">
+              Famili: {{ tumbuhan.keluarga }}
+            </span>
+          </div>
+
+          <p class="flora-card__description" *ngIf="tumbuhan.deskripsiSingkat">
+            {{ tumbuhan.deskripsiSingkat }}
+            </p>
+        </div>
+        <div class="flora-card__footer">
+          <span class="flora-card__cta">Lihat Detail &rarr;</span>
+        </div>
+      </article>
+    </a>
   </div>
 </div>
-
-<ng-template #loading>
-  <p>Loading flora data...</p>
-</ng-template>

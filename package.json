@@ -1,5 +1,5 @@
 {
-  "name": "greenation",
+  "name": "greenaction",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:greenation": "node dist/greenation/server/server.mjs"
+    "serve:ssr:greenaction": "node dist/greenaction/server/server.mjs"
   },
   "private": true,
   "dependencies": {

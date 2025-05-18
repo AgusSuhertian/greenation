@@ -1,0 +1,177 @@
+.detail-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.back-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.loading-indicator, .error-message {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.2em;
+}
+.error-message { color: #e74c3c; }
+
+.fauna-detail-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.fauna-name {
+  text-align: center;
+  font-size: 2.5em;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.scientific-name {
+  text-align: center;
+  font-size: 1.2em;
+  color: #7f8c8d;
+  margin-bottom: 25px;
+}
+
+.image-container {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.fauna-image-detail {
+  max-width: 100%;
+  height: auto;
+  max-height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.info-section {
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #ecf0f1;
+}
+
+.info-section h2 {
+  font-size: 1.5em;
+  color: #34495e;
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 5px;
+}
+
+.info-section p {
+  font-size: 1em;
+  line-height: 1.6;
+  color: #555;
+}
+.description {
+   white-space: pre-wrap; /* Agar format paragraf dari Wikipedia terjaga jika ada */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tambahan untuk src/app/pages/fauna-detail/fauna-detail.component.css */
+
+.main-image-container { /* Ganti nama dari .image-container agar lebih spesifik */
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.photo-gallery-section h2, .taxonomy-section h2 {
+  margin-bottom: 15px;
+}
+
+.photo-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center; /* Atau flex-start */
+}
+
+.gallery-item {
+  flex-basis: calc(20% - 10px); /* Sekitar 5 gambar per baris, sesuaikan */
+  max-width: 100px; /* Batas ukuran thumbnail */
+  cursor: pointer;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 75px; /* Sesuaikan tinggi thumbnail */
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.photo-attribution {
+  font-size: 0.7em;
+  text-align: center;
+  color: #777;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taxonomy-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.taxonomy-item {
+  padding: 5px 0;
+  border-bottom: 1px dashed #eee;
+  font-size: 0.95em;
+}
+.taxonomy-item:last-child {
+  border-bottom: none;
+}
+
+.taxonomy-item .rank {
+  font-weight: bold;
+  color: #3498db;
+  min-width: 80px; /* Agar titik dua sejajar */
+  display: inline-block;
+}
+
+.taxonomy-item .name {
+  color: #333;
+}
+.taxonomy-item em {
+  color: #777;
+  font-size: 0.9em;
+}
+
+.external-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+.external-link:hover {
+  text-decoration: underline;
+}

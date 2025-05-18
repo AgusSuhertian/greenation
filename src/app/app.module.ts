@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent }    from './app.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
+
 import { HomeComponent }   from './pages/home/home.component';
 import { FaunaComponent }  from './pages/fauna/fauna.component';
 import { FloraComponent }  from './pages/flora/flora.component';
@@ -13,9 +16,11 @@ import { AuthGuard }      from './guards/auth.guard';
 import { routes }         from './app.routes';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
+    NavbarComponent,
     HomeComponent,
     FaunaComponent,
     FloraComponent,
