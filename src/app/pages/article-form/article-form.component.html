@@ -1,0 +1,117 @@
+<div class="article-form-container">
+  <h2>Buat Artikel Baru</h2>
+
+  <form #articleForm="ngForm" (ngSubmit)="onSubmit(articleForm)">
+    <div class="form-group">
+      <label for="title">Judul Artikel <span class="required">*</span></label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        [(ngModel)]="article.title"
+        required
+        minlength="5"
+        #titleField="ngModel"
+        [ngClass]="{'is-invalid': titleField.invalid && (titleField.dirty || titleField.touched)}"
+      />
+      <div *ngIf="titleField.invalid && (titleField.dirty || titleField.touched)" class="invalid-feedback">
+        <div *ngIf="titleField.errors?.['required']">Judul wajib diisi.</div>
+        <div *ngIf="titleField.errors?.['minlength']">Judul minimal 5 karakter.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="slug">Slug (URL Friendly) <span class="optional">(opsional, akan dibuat otomatis jika kosong)</span></label>
+      <input
+        type="text"
+        id="slug"
+        name="slug"
+        class="form-control"
+        [(ngModel)]="article.slug"
+        pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+        #slugField="ngModel"
+        [ngClass]="{'is-invalid': slugField.invalid && slugField.touched}"
+      />
+      <div *ngIf="slugField.invalid && slugField.touched" class="invalid-feedback">
+        <div *ngIf="slugField.errors?.['pattern']">Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung (-).</div>
+      </div>
+      <small class="form-text">Contoh: tips-mengenal-flora-langka</small>
+    </div>
+
+    <div class="form-group">
+      <label for="summary">Ringkasan</label>
+      <textarea
+        id="summary"
+        name="summary"
+        class="form-control"
+        rows="3"
+        [(ngModel)]="article.summary"
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="content">Konten Artikel <span class="required">*</span></label>
+      <textarea
+        id="content"
+        name="content"
+        class="form-control"
+        rows="10"
+        [(ngModel)]="article.content"
+        required
+        minlength="50"
+        #contentField="ngModel"
+        [ngClass]="{'is-invalid': contentField.invalid && (contentField.dirty || contentField.touched)}"
+      ></textarea>
+      <div *ngIf="contentField.invalid && (contentField.dirty || contentField.touched)" class="invalid-feedback">
+        <div *ngIf="contentField.errors?.['required']">Konten wajib diisi.</div>
+        <div *ngIf="contentField.errors?.['minlength']">Konten minimal 50 karakter.</div>
+      </div>
+      <small class="form-text">Anda bisa menggunakan Markdown untuk formatting.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">URL Gambar Utama</label>
+      <input
+        type="url"
+        id="imageUrl"
+        name="imageUrl"
+        class="form-control"
+        [(ngModel)]="article.imageUrl"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="authorName">Nama Penulis</label>
+      <input
+        type="text"
+        id="authorName"
+        name="authorName"
+        class="form-control"
+        [(ngModel)]="article.authorName"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="publishDate">Tanggal Publikasi <span class="optional">(opsional, akan diisi otomatis jika kosong)</span></label>
+      <input
+        type="date"
+        id="publishDate"
+        name="publishDate"
+        class="form-control"
+        [(ngModel)]="article.publishDate"
+      />
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="isSubmitting || articleForm.invalid">
+      {{ isSubmitting ? 'Menyimpan...' : 'Simpan Artikel' }}
+    </button>
+  </form>
+</div>

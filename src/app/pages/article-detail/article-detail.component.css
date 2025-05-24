@@ -1,0 +1,28 @@
+.article-content {
+  max-width: 800px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.article-image {
+  max-width: 100%;
+  margin: 1rem 0;
+}
+
+.summary {
+  font-style: italic;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.content {
+  line-height: 1.6;
+}
+
+.loading-indicator,
+.error-message,
+.not-found-message {
+  text-align: center;
+  margin-top: 2rem;
+  color: #555;
+}

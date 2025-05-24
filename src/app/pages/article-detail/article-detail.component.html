@@ -1,0 +1,40 @@
+<ng-container *ngIf="!isLoading && article; else loadingOrError">
+  <article class="article-content">
+    <h1>{{ article.title }}</h1>
+
+    <p *ngIf="article.authorName"><strong>Penulis:</strong> {{ article.authorName }}</p>
+    <p *ngIf="article.publishDate"><strong>Tanggal Publikasi:</strong> {{ article.publishDate | date: 'fullDate' }}</p>
+
+    <!-- Gambar artikel jika tersedia -->
+    <img
+  *ngIf="article.imageUrl"
+  [src]="article.imageUrl"
+  alt="{{ article.title }}"
+  class="article-image"
+  (error)="article.imageUrl = null"
+/>
+<img *ngIf="imageLoadError" src="assets/image-placeholder.png" alt="Placeholder" class="article-image" />
+
+
+
+
+    <p *ngIf="article.summary" class="summary">{{ article.summary }}</p>
+
+    <!-- Konten artikel sebagai HTML -->
+    <div class="content" [innerHTML]="article.content"></div>
+  </article>
+</ng-container>
+
+<ng-template #loadingOrError>
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Sedang memuat artikel...</p>
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!article && !errorMessage && !isLoading" class="not-found-message">
+    <p>Artikel yang Anda cari tidak ditemukan.</p>
+  </div>
+</ng-template>

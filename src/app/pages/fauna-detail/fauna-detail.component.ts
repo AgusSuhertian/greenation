@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router'; // Import RouterLink
+import { ActivatedRoute, RouterLink } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { Fauna } from '../../models/fauna.model'; // Sesuaikan path
-import { FaunaFloraService } from '../../services/fauna-flora.service'; // Sesuaikan path
+import { Fauna } from '../../models/fauna.model'; 
+import { FaunaFloraService } from '../../services/fauna-flora.service'; 
 
 @Component({
   selector: 'app-fauna-detail',
@@ -75,7 +75,7 @@ export class FaunaDetailComponent implements OnInit, OnDestroy {
   }
   updateMainImage(newImageUrl: string): void {
     if (this.fauna) {
-      this.fauna.imageUrl = newImageUrl; // Mengganti gambar utama dengan URL dari thumbnail yang diklik
+      this.fauna.imageUrl = newImageUrl; 
     }
   }
 }

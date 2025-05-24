@@ -1,26 +1,88 @@
 <div class="register-container">
-  <form (submit)="onSubmit($event)" class="register-form">
-    <h2>Register</h2>
+  <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" class="register-form">
+    <h2>Register Akun Baru</h2>
 
     <div class="form-group">
-      <label for="username">Username</label>
-      <input [(ngModel)]="username" name="username" id="username" type="text" required />
+      <label for="username">Username <span class="optional">(opsional, bisa diisi nanti)</span></label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        class="form-control"
+        [(ngModel)]="registerData.username"
+        #usernameField="ngModel"
+      />
+      </div>
+
+    <div class="form-group">
+      <label for="email">Email <span class="required">*</span></label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="form-control"
+        [(ngModel)]="registerData.email"
+        required
+        email #emailField="ngModel"
+        [ngClass]="{'is-invalid': emailField.invalid && (emailField.dirty || emailField.touched)}"
+      />
+      <div *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)" class="invalid-feedback">
+        <div *ngIf="emailField.errors?.['required']">Email wajib diisi.</div>
+        <div *ngIf="emailField.errors?.['email']">Format email tidak valid.</div>
+      </div>
     </div>
 
     <div class="form-group">
-      <label for="password">Password</label>
-      <input [(ngModel)]="password" name="password" id="password" type="password" required />
+      <label for="password">Password <span class="required">*</span></label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="form-control"
+        [(ngModel)]="registerData.password"
+        required
+        minlength="6" #passwordField="ngModel"
+        [ngClass]="{'is-invalid': passwordField.invalid && (passwordField.dirty || passwordField.touched)}"
+      />
+      <div *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)" class="invalid-feedback">
+        <div *ngIf="passwordField.errors?.['required']">Password wajib diisi.</div>
+        <div *ngIf="passwordField.errors?.['minlength']">Password minimal 6 karakter.</div>
+      </div>
     </div>
 
     <div class="form-group">
-      <label for="confirm">Konfirmasi Password</label>
-      <input [(ngModel)]="confirm" name="confirm" id="confirm" type="password" required />
+      <label for="confirmPassword">Konfirmasi Password <span class="required">*</span></label>
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        class="form-control"
+        [(ngModel)]="registerData.confirmPassword"
+        required
+        #confirmPasswordField="ngModel"
+        [ngClass]="{'is-invalid': (confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)) || (registerForm.value.password !== registerForm.value.confirmPassword && confirmPasswordField.touched)}"
+      />
+      <div *ngIf="confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)" class="invalid-feedback">
+        <div *ngIf="confirmPasswordField.errors?.['required']">Konfirmasi password wajib diisi.</div>
+      </div>
+      <div *ngIf="registerForm.value.password !== registerForm.value.confirmPassword && confirmPasswordField.touched && !confirmPasswordField.errors?.['required']" class="invalid-feedback">
+        Password dan konfirmasi password tidak cocok.
+      </div>
     </div>
 
-    <button type="submit">Daftar</button>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="isSubmitting || registerForm.invalid || (registerData.password !== registerData.confirmPassword && registerForm.controls['confirmPassword']?.touched)">
+      {{ isSubmitting ? 'Mendaftar...' : 'Daftar' }}
+    </button>
 
     <p class="login-link">
-      Sudah punya akun? <a (click)="goToLogin()" style="cursor:pointer;">Login di sini</a>
-    </p>
+      Sudah punya akun? <a routerLink="/login" style="cursor:pointer;">Login di sini</a>
+      </p>
   </form>
 </div>

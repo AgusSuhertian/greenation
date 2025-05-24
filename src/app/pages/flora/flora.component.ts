@@ -1,24 +1,23 @@
-// src/app/pages/flora/flora.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Diperlukan untuk [(ngModel)]
-import { RouterLink } from '@angular/router';    // Diperlukan untuk [routerLink] jika kartu bisa diklik
-import { Flora } from '../../models/flora.model'; // Sesuaikan path jika perlu
-import { FaunaFloraService } from '../../services/fauna-flora.service'; // Sesuaikan path jika perlu
+import { FormsModule } from '@angular/forms'; 
+import { RouterLink } from '@angular/router';  
+import { Flora } from '../../models/flora.model'; 
+import { FaunaFloraService } from '../../services/fauna-flora.service'; 
 
 @Component({
-  selector: 'app-flora', // Selector untuk halaman daftar flora
+  selector: 'app-flora', 
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink], // Pastikan FormsModule dan RouterLink ada
-  templateUrl: './flora.component.html', // Template untuk daftar flora
-  styleUrls: ['./flora.component.css']   // Style untuk daftar flora
+  imports: [CommonModule, FormsModule, RouterLink], 
+  templateUrl: './flora.component.html', 
+  styleUrls: ['./flora.component.css']   
 })
-export class FloraComponent implements OnInit { // Nama class harus FloraComponent
-  floraList: Flora[] = []; // Untuk menampung daftar flora
+export class FloraComponent implements OnInit {
+  floraList: Flora[] = []; 
   isLoading: boolean = false;
   errorMessage: string | null = null;
-  searchQuery: string = ''; // Untuk input pencarian
-  hasSearched: boolean = false; // Untuk menandai apakah pencarian sudah dilakukan
+  searchQuery: string = ''; 
+  hasSearched: boolean = false; 
 
   constructor(private faunaFloraService: FaunaFloraService) {
     console.log('[FloraComponent] Constructor - Membuat FloraComponent (daftar).');
@@ -26,12 +25,8 @@ export class FloraComponent implements OnInit { // Nama class harus FloraCompone
 
   ngOnInit(): void {
     console.log('[FloraComponent] ngOnInit - FloraComponent (daftar) diinisialisasi.');
-    // Anda bisa memuat data awal di sini jika mau, misalnya:
-    // this.searchQuery = "Mawar";
-    // this.performSearch();
   }
 
-  // ---> INI METODE YANG HILANG DAN MENYEBABKAN ERROR <---
   performSearch(): void {
     if (!this.searchQuery || !this.searchQuery.trim()) {
       this.errorMessage = "Masukkan kata kunci untuk pencarian flora.";
@@ -42,7 +37,7 @@ export class FloraComponent implements OnInit { // Nama class harus FloraCompone
 
     this.isLoading = true;
     this.errorMessage = null;
-    this.floraList = []; // Kosongkan list sebelum pencarian baru
+    this.floraList = []; 
     this.hasSearched = true;
     console.log(`[FloraComponent] Performing search for flora: "${this.searchQuery}"`);
 

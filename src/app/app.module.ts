@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent }    from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
-
+import { ProfileComponent } from './pages/profile/profile.component';
 import { HomeComponent }   from './pages/home/home.component';
 import { FaunaComponent }  from './pages/fauna/fauna.component';
 import { FloraComponent }  from './pages/flora/flora.component';
@@ -25,7 +25,8 @@ import { routes }         from './app.routes';
     FaunaComponent,
     FloraComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

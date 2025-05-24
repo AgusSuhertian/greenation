@@ -1,0 +1,7 @@
+<div class="profile-container" *ngIf="profile$ | async as profile">
+  <h2>Profil Pengguna</h2>
+  <p><strong>Nama Lengkap:</strong> {{ profile.fullName }}</p>
+  <p><strong>Username:</strong> {{ profile.username }}</p>
+  <p><strong>Email:</strong> {{ profile.email }}</p>
+  <p><strong>Bio:</strong> {{ profile.bio || '-' }}</p>
+</div>

@@ -1,26 +1,20 @@
-/* src/app/pages/fauna/fauna.component.css */
-
-/* Style untuk container utama, judul, dan pencarian bisa tetap sama
-   jika Anda sudah puas dengan yang sebelumnya. Saya akan fokus pada
-   styling untuk .fauna-grid dan .fauna-card yang baru. */
-
 .fauna-container {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Open Sans', 'Lato', 'Roboto', sans-serif; /* Contoh font dari panduan */
+  font-family: 'Open Sans', 'Lato', 'Roboto', sans-serif; 
 }
 
 .page-title {
   text-align: center;
-  color: #2c3e50; /* Warna gelap untuk judul */
+  color: #2c3e50;
   margin-bottom: 10px;
-  font-weight: 700; /* Lebih tebal */
+  font-weight: 700;
 }
 
 .page-subtitle {
   text-align: center;
-  color: #757575; /* Abu-abu untuk subjudul */
+  color: #757575; 
   margin-bottom: 30px;
 }
 
@@ -206,7 +200,7 @@
 .fauna-card__cta {
   font-size: 0.85em;
   font-weight: 700;
-  color: #1976D2; /* Biru */
+  color: #1976D2;
   text-decoration: none;
   transition: color 0.2s ease;
 }
