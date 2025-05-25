@@ -5,7 +5,6 @@
     <p *ngIf="article.authorName"><strong>Penulis:</strong> {{ article.authorName }}</p>
     <p *ngIf="article.publishDate"><strong>Tanggal Publikasi:</strong> {{ article.publishDate | date: 'fullDate' }}</p>
 
-    <!-- Gambar artikel jika tersedia -->
     <img
   *ngIf="article.imageUrl"
   [src]="article.imageUrl"
@@ -20,7 +19,6 @@
 
     <p *ngIf="article.summary" class="summary">{{ article.summary }}</p>
 
-    <!-- Konten artikel sebagai HTML -->
     <div class="content" [innerHTML]="article.content"></div>
   </article>
 </ng-container>

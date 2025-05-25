@@ -1,0 +1,25 @@
+<div class="map-page-container">
+  <header class="map-header">
+    <div class="container">
+      <h1>Peta Keanekaragaman Hayati Greenaction</h1>
+      <p>Jelajahi lokasi penting flora, fauna, dan area konservasi di Indonesia.</p>
+    </div>
+  </header>
+
+  <main class="map-main container">
+    <section class="map-render-area" #mapContainerEl id="mapInAngular">
+      <div *ngIf="isMapLoading" class="map-loading">
+        Memuat peta...
+      </div>
+    </section>
+
+    <aside class="map-legend">
+      <h4>Legenda</h4>
+      <ul>
+        <li><span class="legend-icon fauna"></span> Fauna Penting</li>
+        <li><span class="legend-icon flora"></span> Flora Endemik</li>
+        <li><span class="legend-icon konservasi"></span> Area Konservasi</li>
+      </ul>
+    </aside>
+  </main>
+</div>

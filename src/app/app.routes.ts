@@ -9,6 +9,7 @@ import { FloraDetailComponent } from './pages/flora-detail/flora-detail.componen
 import { ArticleDetailComponent } from './pages/article-detail/article-detail.component';
 import { ArticleFormComponent } from './pages/article-form/article-form.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { InteractiveMapComponent } from './pages/interactive-map/interactive-map.component';
 
 
 
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'artikel/baru', component: ArticleFormComponent, canActivate: [AuthGuard] },
   { path: 'artikel/:id', component: ArticleDetailComponent, canActivate: [AuthGuard] },
   { path: 'profil', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'peta-interaktif', component: InteractiveMapComponent, canActivate: [AuthGuard] },
 
   // Redirect root '/' ke login
   { path: '', redirectTo: 'login', pathMatch: 'full' },

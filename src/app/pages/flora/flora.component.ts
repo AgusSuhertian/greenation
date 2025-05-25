@@ -25,6 +25,31 @@ export class FloraComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('[FloraComponent] ngOnInit - FloraComponent (daftar) diinisialisasi.');
+    this.loadInitialFlora();
+  }
+
+  // Method untuk load data flora awal tanpa filter/search
+  loadInitialFlora(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.hasSearched = false;
+    this.floraList = [];
+
+    this.faunaFloraService.getAllFlora().subscribe({
+      next: (data: Flora[]) => {
+        this.floraList = data;
+        this.isLoading = false;
+        console.log('[FloraComponent] Data flora awal diterima:', this.floraList);
+        if (data.length === 0) {
+          this.errorMessage = 'Tidak ada data flora yang tersedia saat ini.';
+        }
+      },
+      error: (err: any) => {
+        this.errorMessage = 'Terjadi kesalahan saat mengambil data flora awal. Coba lagi nanti.';
+        this.isLoading = false;
+        console.error('[FloraComponent] Error fetching initial flora data:', err);
+      }
+    });
   }
 
   performSearch(): void {
@@ -45,12 +70,7 @@ export class FloraComponent implements OnInit {
       next: (data: Flora[]) => {
         this.floraList = data;
         this.isLoading = false;
-        console.log('[FloraComponent] Data flora (daftar) received:', this.floraList);
-             this.floraList.forEach(item => {
-          if (item.id === undefined || item.id === null) {
-            console.warn('[FloraComponent] DITEMUKAN ITEM FLORA TANPA ID YANG VALID:', item);
-          }
-        });
+        console.log('[FloraComponent] Data flora hasil pencarian diterima:', this.floraList);
         if (data.length === 0) {
           this.errorMessage = `Tidak ada hasil flora ditemukan untuk "${this.searchQuery}".`;
         }
@@ -58,7 +78,7 @@ export class FloraComponent implements OnInit {
       error: (err: any) => {
         this.errorMessage = 'Terjadi kesalahan saat mengambil data flora. Coba lagi nanti.';
         this.isLoading = false;
-        console.error('[FloraComponent] Error fetching flora data (daftar):', err);
+        console.error('[FloraComponent] Error fetching flora data (search):', err);
       }
     });
   }

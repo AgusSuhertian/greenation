@@ -22,7 +22,27 @@ export class FaunaComponent implements OnInit {
   constructor(private faunaService: FaunaFloraService) { }
 
   ngOnInit(): void {
-   }
+    this.loadAllFauna();
+  }
+
+  loadAllFauna(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.faunaService.getAllFauna(20).subscribe({
+      next: (data) => {
+        this.faunaList = data;
+        this.isLoading = false;
+        if (data.length === 0) {
+          this.errorMessage = 'Tidak ada data fauna yang ditemukan.';
+        }
+      },
+      error: (err) => {
+        this.errorMessage = 'Terjadi kesalahan saat mengambil data fauna.';
+        this.isLoading = false;
+        console.error('[FaunaComponent] Error loading all fauna:', err);
+      }
+    });
+  }
 
   performSearch(): void {
     if (!this.searchQuery.trim()) {

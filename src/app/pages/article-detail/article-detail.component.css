@@ -1,28 +1,47 @@
 .article-content {
-  max-width: 800px;
-  margin: auto;
-  padding: 1rem;
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Montserrat', sans-serif;
+  color: #2e7d32;
 }
 
 .article-image {
   max-width: 100%;
-  margin: 1rem 0;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
 }
 
 .summary {
   font-style: italic;
-  color: #666;
-  margin-bottom: 1rem;
+  color: #4e944f;
+  background-color: #f1f8e9;
+  padding: 1rem;
+  border-left: 4px solid #a5d6a7;
+  margin-bottom: 2rem;
+  border-radius: 4px;
 }
 
 .content {
-  line-height: 1.6;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  color: #333;
+}
+
+.content p {
+  margin-bottom: 1.5rem;
 }
 
 .loading-indicator,
 .error-message,
 .not-found-message {
   text-align: center;
-  margin-top: 2rem;
-  color: #555;
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  color: #757575;
 }
