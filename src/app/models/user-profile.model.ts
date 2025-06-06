@@ -1,14 +1,19 @@
-import { Timestamp, FieldValue } from 'firebase/firestore';
+import { Timestamp, FieldValue } from '@angular/fire/firestore';
 
 export interface UserProfile {
-  id?: string;
-  email?: string;
-  displayName?: string;
-  photoURL?: string;
+  id: string;
   username?: string;
   fullName?: string;
-  avatarUrl?: string;
+  email?: string;  
+  avatarUrl?: string; 
   bio?: string;
-  createdAt?: Date | string | Timestamp | FieldValue;
-  updatedAt?: Date | string | Timestamp | FieldValue;
+  createdAt?: Date | Timestamp | FieldValue; 
+  updatedAt?: Date | Timestamp | FieldValue; 
+  dateOfBirth?: Date | string | Timestamp | FieldValue;
+  sessionStart?: Date | string | Timestamp | FieldValue;
+  sessionEnd?: Date | string | Timestamp | FieldValue;
+  visitCount?: number;
+  lastVisitDuration?: number;
+  totalVisitDuration?: number;
+  lastActiveAt?: Date | string | Timestamp | FieldValue;
 }

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Article } from '../../models/article.model';
 import { ArticleService } from '../../services/article.service';
 import { firstValueFrom } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-article-detail',
@@ -16,10 +17,12 @@ export class ArticleDetailComponent implements OnInit {
   article: Article | null | undefined = null;
   isLoading: boolean = true;
   errorMessage: string | null = null;
+  safeContent: SafeHtml = ''; 
 
   constructor(
     private route: ActivatedRoute,
-    private articleService: ArticleService
+    private articleService: ArticleService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +33,17 @@ export class ArticleDetailComponent implements OnInit {
       this.errorMessage = 'Parameter ID atau Slug tidak ditemukan.';
       this.isLoading = false;
     }
+  }
+
+  private convertPlainTextToHtml(text: string): string {
+    if (!text) return '';
+    const paragraphs = text
+      .split(/\r?\n+/)
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
+      .map(line => `<p>${line}</p>`)
+      .join('');
+    return paragraphs;
   }
 
   async loadArticleDetail(idOrSlug: string): Promise<void> {
@@ -45,16 +59,15 @@ export class ArticleDetailComponent implements OnInit {
 
       if (!this.article) {
         this.errorMessage = 'Artikel tidak ditemukan.';
+      } else {
+        const contentHtml = this.convertPlainTextToHtml(this.article.content || '');
+        this.safeContent = this.sanitizer.bypassSecurityTrustHtml(contentHtml);
       }
-
     } catch (error: any) {
       this.errorMessage = 'Gagal memuat artikel.';
       console.error(error);
     } finally {
       this.isLoading = false;
     }
-    console.log('Image URL:', this.article?.imageUrl);
-
   }
-  
 }

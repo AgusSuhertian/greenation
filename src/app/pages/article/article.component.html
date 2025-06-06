@@ -1,0 +1,65 @@
+<div class="article-list-page">
+  <header class="page-header">
+    <h1>Daftar Artikel Greenaction</h1>
+    <p>Temukan wawasan dan informasi terbaru seputar keanekaragaman hayati dan konservasi di Indonesia.</p>
+  </header>
+
+  <div class="container">
+    <div *ngIf="isLoading" class="loading-indicator">
+      <p>Memuat artikel...</p>
+    </div>
+
+    <div *ngIf="error && !isLoading" class="error-message alert alert-danger">
+      <p>{{ error }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && displayedArticles.length > 0" class="articles-grid">
+      <div *ngFor="let article of displayedArticles" class="article-card-item">
+        <a [routerLink]="['/artikel', article.slug || article.id]" class="article-card__link">
+          <div class="article-image-container" *ngIf="article.imageUrl">
+            <img [src]="article.imageUrl" [alt]="article.title"
+                 onError="this.style.display='none'; this.parentElement.style.backgroundColor='#e0e0e0';">
+          </div>
+          <div class="article-image-placeholder" *ngIf="!article.imageUrl">
+            <span>Gambar Tidak Tersedia</span>
+          </div>
+
+          <div class="article-card-content">
+            <h3>{{ article.title }}</h3>
+            <p class="article-summary" *ngIf="article.summary">{{ truncateText(article.summary, 120) }}</p>
+            <div class="article-meta">
+              <span *ngIf="article.authorName" class="author">
+                {{ article.authorName }}
+              </span>
+              <span *ngIf="getDisplayDate(article) as displayDate" class="date">
+                {{ displayDate | date: 'dd MMMM yyyy' }}
+              </span>
+            </div>
+            <span class="read-more">Baca Selengkapnya &rarr;</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && displayedArticles.length === 0 && !error" class="no-articles-message">
+      <p>Belum ada artikel yang tersedia saat ini. Silakan cek kembali nanti!</p>
+    </div>
+
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+        &laquo; Sebelumnya
+      </button>
+
+      <button
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        (click)="onPageChange(i + 1)"
+        [class.active]="currentPage === (i + 1)">
+        {{ i + 1 }}
+      </button>
+
+      <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
+        Berikutnya &raquo;
+      </button>
+    </div>
+  </div>
+</div>

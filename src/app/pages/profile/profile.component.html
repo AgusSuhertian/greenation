@@ -1,7 +1,54 @@
-<div class="profile-container" *ngIf="profile$ | async as profile">
-  <h2>Profil Pengguna</h2>
-  <p><strong>Nama Lengkap:</strong> {{ profile.fullName }}</p>
-  <p><strong>Username:</strong> {{ profile.username }}</p>
-  <p><strong>Email:</strong> {{ profile.email }}</p>
-  <p><strong>Bio:</strong> {{ profile.bio || '-' }}</p>
+<div class="profile-card" *ngIf="profile; else noProfile">
+  <h2 class="title">👤 Profil Saya</h2>
+
+  
+  <div *ngIf="!editMode; else editForm">
+    <div class="profile-info">
+      <p><strong>🆔 Username:</strong> {{ profile.username }}</p>
+      <p><strong>📛 Full Name:</strong> {{ profile.fullName }}</p>
+      <p><strong>📧 Email:</strong> {{ profile.email }}</p>
+      <p><strong>📝 Bio:</strong> {{ profile.bio || '-' }}</p>
+      <p><strong>🎂 Date of Birth:</strong> {{ profile.dateOfBirth | date:'longDate' || '-' }}</p>
+      <p><strong>👀 Visit Count:</strong> {{ profile.visitCount || 0 }}</p>
+      <p><strong>⏱️ Total Visit Duration:</strong> {{ profile.totalVisitDuration || 0 }} detik</p>
+    </div>
+
+    <button class="btn edit-btn" (click)="toggleEdit()">✏️ Ubah Profil</button>
+  </div>
+
+  <ng-template #editForm>
+    <form class="edit-form" (ngSubmit)="saveProfile()">
+      <label>
+        Username:
+        <input type="text" [(ngModel)]="editedProfile.username" name="username" />
+      </label>
+
+      <label>
+        Full Name:
+        <input type="text" [(ngModel)]="editedProfile.fullName" name="fullName" />
+      </label>
+
+      <label>
+        Bio:
+        <textarea rows="3" [(ngModel)]="editedProfile.bio" name="bio"></textarea>
+      </label>
+
+      <label>
+        Date of Birth:
+        <input type="date" [(ngModel)]="editedProfile.dateOfBirth" name="dateOfBirth" />
+      </label>
+
+      <div class="button-group">
+        <button class="btn save-btn" type="submit" [disabled]="loading">💾 Simpan</button>
+        <button class="btn cancel-btn" type="button" (click)="toggleEdit()" [disabled]="loading">❌ Batal</button>
+      </div>
+    </form>
+  </ng-template>
+
+  <p class="error" *ngIf="errorMessage">⚠️ {{ errorMessage }}</p>
+  <p class="success" *ngIf="successMessage">✅ {{ successMessage }}</p>
 </div>
+
+<ng-template #noProfile>
+  <p>⚠️ Profil belum tersedia.</p>
+</ng-template>

@@ -1,18 +1,14 @@
 <nav class="navbar">
   <div class="navbar-container">
-    <!-- Logo -->
     <a routerLink="/home" class="navbar-brand" (click)="closeMenu()">
       Greenaction
     </a>
 
-    <!-- Mobile menu toggle -->
     <button class="navbar-toggler" (click)="toggleMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Menu Items -->
     <ul class="navbar-nav" [class.open]="isMenuOpen">
-      <!-- Static Links -->
       <li>
         <a routerLink="/home" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Home</a>
       </li>
@@ -26,15 +22,12 @@
         <a routerLink="/peta-interaktif" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Peta</a>
       </li>
 
-      <!-- Links hanya untuk user yang login -->
       <li *ngIf="isUserLoggedIn">
-        <a routerLink="/artikel/baru" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Buat Artikel</a>
+        <a routerLink="/artikel" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Artikel</a>
       </li>
       <li *ngIf="isUserLoggedIn">
         <a routerLink="/profil" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Profil</a>
       </li>
-
-      <!-- Login / Logout -->
       <li *ngIf="!isUserLoggedIn">
         <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Login</a>
       </li>

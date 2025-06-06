@@ -19,59 +19,99 @@ export class FaunaComponent implements OnInit {
   searchQuery: string = '';
   hasSearched: boolean = false;
 
-  constructor(private faunaService: FaunaFloraService) { }
+currentPage: number = 1;
+pageSize: number = 9;
+totalItems: number = 0;
+totalPages: number = 1;
 
-  ngOnInit(): void {
-    this.loadAllFauna();
-  }
+private fullFaunaList: Fauna[] = [];
 
-  loadAllFauna(): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-    this.faunaService.getAllFauna(20).subscribe({
-      next: (data) => {
-        this.faunaList = data;
-        this.isLoading = false;
-        if (data.length === 0) {
-          this.errorMessage = 'Tidak ada data fauna yang ditemukan.';
-        }
-      },
-      error: (err) => {
-        this.errorMessage = 'Terjadi kesalahan saat mengambil data fauna.';
-        this.isLoading = false;
-        console.error('[FaunaComponent] Error loading all fauna:', err);
+constructor(private faunaService: FaunaFloraService) { }
+
+ngOnInit(): void {
+  this.loadAllFauna();
+}
+
+loadAllFauna(): void {
+  this.isLoading = true;
+  this.errorMessage = null;
+  this.faunaService.getAllFauna(100).subscribe({
+    next: (data) => {
+      this.fullFaunaList = data;
+      this.totalItems = data.length;
+      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      this.setPage(1);
+      this.isLoading = false;
+      if (data.length === 0) {
+        this.errorMessage = 'Tidak ada data fauna yang ditemukan.';
       }
-    });
-  }
-
-  performSearch(): void {
-    if (!this.searchQuery.trim()) {
-      this.errorMessage = "Masukkan kata kunci untuk pencarian fauna.";
-      this.faunaList = [];
-      this.hasSearched = true; 
-      return;
+    },
+    error: (err: any) => {
+      this.errorMessage = 'Terjadi kesalahan saat mengambil data fauna.';
+      this.isLoading = false;
+      console.error('[FaunaComponent] Error loading all fauna:', err);
     }
+  });
+}
 
-    this.isLoading = true;
-    this.errorMessage = null;
+performSearch(): void {
+  if (!this.searchQuery.trim()) {
+    this.errorMessage = "Masukkan kata kunci untuk pencarian fauna.";
     this.faunaList = [];
-    this.hasSearched = true;
-    console.log(`[FaunaComponent] Performing search for: "${this.searchQuery}"`);
-
-    this.faunaService.searchFauna(this.searchQuery).subscribe({
-      next: (data) => {
-        this.faunaList = data;
-        this.isLoading = false;
-        console.log('[FaunaComponent] Data received:', data);
-        if (data.length === 0) {
-          this.errorMessage = `Tidak ada hasil ditemukan untuk "${this.searchQuery}".`;
-        }
-      },
-      error: (err) => {
-        this.errorMessage = 'Terjadi kesalahan saat mengambil data fauna. Coba lagi nanti.';
-        this.isLoading = false;
-        console.error('[FaunaComponent] Error fetching fauna data:', err);
-      }
-    });
+    this.hasSearched = true; 
+    return;
   }
+
+  this.isLoading = true;
+  this.errorMessage = null;
+  this.hasSearched = true;
+
+  this.faunaService.searchFauna(this.searchQuery).subscribe({
+    next: (data) => {
+      this.fullFaunaList = data;
+      this.totalItems = data.length;
+      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      this.setPage(1);
+      this.isLoading = false;
+      if (data.length === 0) {
+        this.errorMessage = `Tidak ada hasil ditemukan untuk "${this.searchQuery}".`;
+      }
+    },
+    error: (err: any) => {
+      this.errorMessage = 'Terjadi kesalahan saat mengambil data fauna. Coba lagi nanti.';
+      this.isLoading = false;
+      console.error('[FaunaComponent] Error fetching fauna data:', err);
+    }
+  });
+}
+
+setPage(page: number): void {
+  if (page < 1) page = 1;
+  if (page > this.totalPages) page = this.totalPages;
+  this.currentPage = page;
+
+  const startIndex = (page - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+  this.faunaList = this.fullFaunaList.slice(startIndex, endIndex);
+}
+
+getPages(): number[] {
+  const pages: number[] = [];
+  for (let i = 1; i <= this.totalPages; i++) {
+    pages.push(i);
+  }
+  return pages;
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages) {
+    this.setPage(this.currentPage + 1);
+  }
+}
+
+prevPage(): void {
+  if (this.currentPage > 1) {
+    this.setPage(this.currentPage - 1);
+  }
+}
 }

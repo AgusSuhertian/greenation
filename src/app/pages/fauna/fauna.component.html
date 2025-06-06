@@ -31,27 +31,43 @@
     <a *ngFor="let hewan of faunaList" [routerLink]="['/fauna', hewan.id]" class="fauna-card-link">
       <article class="fauna-card">
         <div class="fauna-card__image-container">
-          <img [src]="hewan.imageUrl" [alt]="hewan.namaUmum" class="fauna-card__image">
+          <img [src]="hewan.imageUrl" [alt]="hewan.namaUmum" class="fauna-card__image" />
         </div>
         <div class="fauna-card__content">
           <h3 class="fauna-card__name">{{ hewan.namaUmum }}</h3>
           <p class="fauna-card__scientific-name"><em>{{ hewan.namaIlmiah }}</em></p>
 
-          <div class="fauna-card__meta" *ngIf="hewan.statusKonservasi && hewan.statusKonservasi.toLowerCase() !== 'tidak diketahui'">
-            <span class="fauna-card__status"
-                  [ngClass]="{
-                    'fauna-card__status--kritis': hewan.statusKonservasi?.toLowerCase().includes('kritis') || hewan.statusKonservasi?.toLowerCase().includes('critically endangered'),
-                    'fauna-card__status--terancam': hewan.statusKonservasi?.toLowerCase().includes('terancam') || hewan.statusKonservasi?.toLowerCase().includes('endangered'),
-                    'fauna-card__status--rentan': hewan.statusKonservasi?.toLowerCase().includes('rentan') || hewan.statusKonservasi?.toLowerCase().includes('vulnerable'),
-                    'fauna-card__status--hampir-terancam': hewan.statusKonservasi?.toLowerCase().includes('hampir terancam') || hewan.statusKonservasi?.toLowerCase().includes('near threatened'),
-                    'fauna-card__status--resiko-rendah': hewan.statusKonservasi?.toLowerCase().includes('resiko rendah') || hewan.statusKonservasi?.toLowerCase().includes('least concern')
-                  }">
-              {{ hewan.statusKonservasi.split('(')[0].trim() }} </span>
+          <div
+            class="fauna-card__meta"
+            *ngIf="hewan.statusKonservasi && hewan.statusKonservasi.toLowerCase() !== 'tidak diketahui'"
+          >
+            <span
+              class="fauna-card__status"
+              [ngClass]="{
+                'fauna-card__status--kritis':
+                  hewan.statusKonservasi?.toLowerCase().includes('kritis') ||
+                  hewan.statusKonservasi?.toLowerCase().includes('critically endangered'),
+                'fauna-card__status--terancam':
+                  hewan.statusKonservasi?.toLowerCase().includes('terancam') ||
+                  hewan.statusKonservasi?.toLowerCase().includes('endangered'),
+                'fauna-card__status--rentan':
+                  hewan.statusKonservasi?.toLowerCase().includes('rentan') ||
+                  hewan.statusKonservasi?.toLowerCase().includes('vulnerable'),
+                'fauna-card__status--hampir-terancam':
+                  hewan.statusKonservasi?.toLowerCase().includes('hampir terancam') ||
+                  hewan.statusKonservasi?.toLowerCase().includes('near threatened'),
+                'fauna-card__status--resiko-rendah':
+                  hewan.statusKonservasi?.toLowerCase().includes('resiko rendah') ||
+                  hewan.statusKonservasi?.toLowerCase().includes('least concern')
+              }"
+            >
+              {{ hewan.statusKonservasi.split('(')[0].trim() }}
+            </span>
           </div>
 
           <p class="fauna-card__description" *ngIf="hewan.deskripsiSingkat">
             {{ hewan.deskripsiSingkat }}
-            </p>
+          </p>
         </div>
         <div class="fauna-card__footer">
           <span class="fauna-card__cta">Lihat Detail &rarr;</span>
@@ -59,4 +75,18 @@
       </article>
     </a>
   </div>
-</div>
+
+<nav *ngIf="totalPages > 1" class="pagination-nav" aria-label="Pagination Navigation">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+
+  <button
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    (click)="setPage(i + 1)"
+    [class.active]="currentPage === (i + 1)"
+    [attr.aria-current]="currentPage === (i + 1) ? 'page' : null"
+  >
+    {{ i + 1 }}
+  </button>
+
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+</nav>

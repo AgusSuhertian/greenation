@@ -198,3 +198,27 @@
 .flora-card-link:hover .flora-card__cta {
   color: #2E7D32;
 }
+
+.pagination-nav {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.pagination-nav button {
+  margin: 0 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.pagination-nav button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-nav button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}

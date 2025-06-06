@@ -3,6 +3,23 @@
     <h2>Register Akun Baru</h2>
 
     <div class="form-group">
+      <label for="fullName">Nama Lengkap <span class="required">*</span></label>
+      <input
+        type="text"
+        id="fullName"
+        name="fullName"
+        class="form-control"
+        [(ngModel)]="registerData.fullName"
+        required
+        #fullNameField="ngModel"
+        [ngClass]="{'is-invalid': fullNameField.invalid && (fullNameField.dirty || fullNameField.touched)}"
+      />
+      <div *ngIf="fullNameField.invalid && (fullNameField.dirty || fullNameField.touched)" class="invalid-feedback">
+        <div *ngIf="fullNameField.errors?.['required']">Nama lengkap wajib diisi.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="username">Username <span class="optional"></span></label>
       <input
         type="text"
@@ -12,7 +29,19 @@
         [(ngModel)]="registerData.username"
         #usernameField="ngModel"
       />
-      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="dateOfBirth">Tanggal Lahir <span class="optional"></span></label>
+      <input
+        type="date"
+        id="dateOfBirth"
+        name="dateOfBirth"
+        class="form-control"
+        [(ngModel)]="registerData.dateOfBirth"
+        #dateOfBirthField="ngModel"
+      />
+    </div>
 
     <div class="form-group">
       <label for="email">Email <span class="required"></span></label>
@@ -23,13 +52,10 @@
         class="form-control"
         [(ngModel)]="registerData.email"
         required
-        email #emailField="ngModel"
+        email
+        #emailField="ngModel"
         [ngClass]="{'is-invalid': emailField.invalid && (emailField.dirty || emailField.touched)}"
       />
-      <div *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)" class="invalid-feedback">
-        <div *ngIf="emailField.errors?.['required']">Email wajib diisi.</div>
-        <div *ngIf="emailField.errors?.['email']">Format email tidak valid.</div>
-      </div>
     </div>
 
     <div class="form-group">
@@ -41,17 +67,14 @@
         class="form-control"
         [(ngModel)]="registerData.password"
         required
-        minlength="6" #passwordField="ngModel"
+        minlength="6"
+        #passwordField="ngModel"
         [ngClass]="{'is-invalid': passwordField.invalid && (passwordField.dirty || passwordField.touched)}"
       />
-      <div *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)" class="invalid-feedback">
-        <div *ngIf="passwordField.errors?.['required']">Password wajib diisi.</div>
-        <div *ngIf="passwordField.errors?.['minlength']">Password minimal 6 karakter.</div>
-      </div>
     </div>
 
     <div class="form-group">
-      <label for="confirmPassword">Konfirmasi Password <span class="required"></span></label>
+      <label for="confirmPassword">Konfirmasi Password <span class="required">*</span></label>
       <input
         type="password"
         id="confirmPassword"
@@ -62,12 +85,6 @@
         #confirmPasswordField="ngModel"
         [ngClass]="{'is-invalid': (confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)) || (registerForm.value.password !== registerForm.value.confirmPassword && confirmPasswordField.touched)}"
       />
-      <div *ngIf="confirmPasswordField.invalid && (confirmPasswordField.dirty || confirmPasswordField.touched)" class="invalid-feedback">
-        <div *ngIf="confirmPasswordField.errors?.['required']">Konfirmasi password wajib diisi.</div>
-      </div>
-      <div *ngIf="registerForm.value.password !== registerForm.value.confirmPassword && confirmPasswordField.touched && !confirmPasswordField.errors?.['required']" class="invalid-feedback">
-        Password dan konfirmasi password tidak cocok.
-      </div>
     </div>
 
     <div *ngIf="errorMessage" class="alert alert-danger">
@@ -83,6 +100,6 @@
 
     <p class="login-link">
       Sudah punya akun? <a routerLink="/login" style="cursor:pointer;">Login di sini</a>
-      </p>
+    </p>
   </form>
 </div>

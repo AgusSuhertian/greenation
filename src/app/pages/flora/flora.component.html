@@ -1,4 +1,5 @@
-<div class="flora-container"> <h1 class="page-title">Ensiklopedia Flora</h1>
+<div class="flora-container">
+  <h1 class="page-title">Ensiklopedia Flora</h1>
   <p class="page-subtitle">Temukan informasi berbagai jenis tumbuhan dari seluruh dunia.</p>
 
   <div class="search-section">
@@ -22,29 +23,30 @@
     <p>{{ errorMessage }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !errorMessage && floraList.length === 0 && hasSearched" class="no-results-message">
+  <div *ngIf="!isLoading && !errorMessage && displayedFlora.length === 0 && hasSearched" class="no-results-message">
     <p>Tidak ada data flora yang cocok dengan pencarian Anda.</p>
   </div>
 
-  <div class="flora-grid" *ngIf="!isLoading && !errorMessage && floraList.length > 0">
-    <a *ngFor="let tumbuhan of floraList" [routerLink]="['/flora', tumbuhan.id]" class="flora-card-link">
+  <div class="flora-grid" *ngIf="!isLoading && !errorMessage && displayedFlora.length > 0">
+    <a *ngFor="let tumbuhan of displayedFlora" [routerLink]="['/flora', tumbuhan.id]" class="flora-card-link">
       <article class="flora-card">
         <div class="flora-card__image-container">
-          <img [src]="tumbuhan.imageUrl" [alt]="tumbuhan.namaUmum" class="flora-card__image">
+          <img [src]="tumbuhan.imageUrl" [alt]="tumbuhan.namaUmum" class="flora-card__image" />
         </div>
         <div class="flora-card__content">
           <h3 class="flora-card__name">{{ tumbuhan.namaUmum }}</h3>
           <p class="flora-card__scientific-name"><em>{{ tumbuhan.namaIlmiah }}</em></p>
 
-          <div class="flora-card__meta" *ngIf="tumbuhan.keluarga && tumbuhan.keluarga.toLowerCase() !== 'tidak diketahui'">
-            <span class="flora-card__family">
-              Famili: {{ tumbuhan.keluarga }}
-            </span>
+          <div
+            class="flora-card__meta"
+            *ngIf="tumbuhan.keluarga && tumbuhan.keluarga.toLowerCase() !== 'tidak diketahui'"
+          >
+            <span class="flora-card__family">Famili: {{ tumbuhan.keluarga }}</span>
           </div>
 
           <p class="flora-card__description" *ngIf="tumbuhan.deskripsiSingkat">
             {{ tumbuhan.deskripsiSingkat }}
-            </p>
+          </p>
         </div>
         <div class="flora-card__footer">
           <span class="flora-card__cta">Lihat Detail &rarr;</span>
@@ -52,4 +54,19 @@
       </article>
     </a>
   </div>
+
+  <nav *ngIf="!isLoading && !errorMessage && paginationArray.length > 1" class="pagination-nav" aria-label="Pagination Navigation">
+    <button (click)="previousPage()" [disabled]="currentPage === 1">Prev</button>
+
+    <button
+      *ngFor="let page of paginationArray"
+      (click)="goToPage(page)"
+      [class.active]="currentPage === page"
+      [attr.aria-current]="currentPage === page ? 'page' : null"
+    >
+      {{ page }}
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </nav>
 </div>

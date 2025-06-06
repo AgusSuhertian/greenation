@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoading && article; else loadingOrError">
+<div *ngIf="!isLoading && article; else loadingOrError">
   <article class="article-content">
     <h1>{{ article.title }}</h1>
 
@@ -6,22 +6,19 @@
     <p *ngIf="article.publishDate"><strong>Tanggal Publikasi:</strong> {{ article.publishDate | date: 'fullDate' }}</p>
 
     <img
-  *ngIf="article.imageUrl"
-  [src]="article.imageUrl"
-  alt="{{ article.title }}"
-  class="article-image"
-  (error)="article.imageUrl = null"
-/>
-<img *ngIf="imageLoadError" src="assets/image-placeholder.png" alt="Placeholder" class="article-image" />
-
-
-
+      *ngIf="article.imageUrl"
+      [src]="article.imageUrl"
+      alt="{{ article.title }}"
+      class="article-image"
+      (error)="article.imageUrl = null"
+    />
+    <img *ngIf="imageLoadError" src="assets/image-placeholder.png" alt="Placeholder" class="article-image" />
 
     <p *ngIf="article.summary" class="summary">{{ article.summary }}</p>
 
-    <div class="content" [innerHTML]="article.content"></div>
+    <div class="content" [innerHTML]="safeContent"></div>
   </article>
-</ng-container>
+</div>
 
 <ng-template #loadingOrError>
   <div *ngIf="isLoading" class="loading-indicator">
