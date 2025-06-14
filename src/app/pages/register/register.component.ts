@@ -18,7 +18,8 @@ export class RegisterComponent {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    dateOfBirth: '' 
   };
 
   isSubmitting = false;
@@ -71,7 +72,7 @@ export class RegisterComponent {
             this.successMessage += " Anda akan diarahkan...";
           }
         registerForm.resetForm(); 
-        this.registerData = { username: '', fullName: '', email: '', password: '', confirmPassword: '' };
+        this.registerData = { username: '', fullName: '', email: '', password: '', confirmPassword: '', dateOfBirth: '' };
 
       } else {
              this.errorMessage = "Registrasi berhasil tetapi data pengguna tidak diterima.";

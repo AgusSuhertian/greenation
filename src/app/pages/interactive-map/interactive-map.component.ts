@@ -40,32 +40,93 @@ export class InteractiveMapComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
   public isMapLoading = true;
 
-  private lokasiData: LokasiItem[] = [
-    {
-        lat: -8.583333, lng: 119.491667, nama: "Taman Nasional Komodo",
-        deskripsi: "Habitat asli Komodo.",
-        imageUrl: "https://placehold.co/100x80/A1887F/FFFFFF?text=Komodo",
-        linkDetail: "/fauna/komodo-slug"
-    },
-    {
-        lat: -0.502106, lng: 111.475285, nama: "Hutan Kalimantan (Orangutan)",
-        deskripsi: "Rumah Orangutan Kalimantan.",
-        imageUrl: "https://placehold.co/100x80/66BB6A/FFFFFF?text=Orangutan",
-        linkDetail: "/fauna/orangutan-slug"
-    },
-    {
-        lat: -6.752222, lng: 105.331111, nama: "Taman Nasional Ujung Kulon",
-        deskripsi: "Rumah Badak Jawa.",
-        imageUrl: "https://placehold.co/100x80/757575/FFFFFF?text=Badak",
-        linkDetail: "/fauna/badak-jawa"
-    },
-    {
-        lat: -8.409518, lng: 115.188919, nama: "Taman Nasional Bali Barat (Jalak Bali)",
-        deskripsi: "Habitat Jalak Bali.",
-        imageUrl: "https://placehold.co/100x80/4FC3F7/FFFFFF?text=Jalak+Bali",
-        linkDetail: "/flora/jalak-bali"
-    }
-  ];
+ private lokasiData: LokasiItem[] = [
+  {
+    lat: -8.583333, lng: 119.491667, nama: "Taman Nasional Komodo",
+    deskripsi: "Habitat asli Komodo di Nusa Tenggara Timur.",
+    imageUrl: "https://placehold.co/100x80/A1887F/FFFFFF?text=Komodo",
+    linkDetail: "/fauna/komodo-slug"
+  },
+  {
+    lat: -0.502106, lng: 111.475285, nama: "Hutan Kalimantan",
+    deskripsi: "Rumah bagi Orangutan dan biodiversitas tropis.",
+    imageUrl: "https://placehold.co/100x80/66BB6A/FFFFFF?text=Orangutan",
+    linkDetail: "/fauna/orangutan-slug"
+  },
+  {
+    lat: -6.752222, lng: 105.331111, nama: "Ujung Kulon",
+    deskripsi: "Habitat Badak Jawa yang terancam punah.",
+    imageUrl: "https://placehold.co/100x80/757575/FFFFFF?text=Badak",
+    linkDetail: "/fauna/badak-jawa"
+  },
+  {
+    lat: -8.409518, lng: 115.188919, nama: "Taman Nasional Bali Barat",
+    deskripsi: "Habitat Jalak Bali, burung langka endemik Bali.",
+    imageUrl: "https://placehold.co/100x80/4FC3F7/FFFFFF?text=Jalak+Bali",
+    linkDetail: "/flora/jalak-bali"
+  },
+  {
+    lat: -2.990934, lng: 104.756554, nama: "Taman Nasional Sembilang",
+    deskripsi: "Ekosistem mangrove dan tempat persinggahan burung migran.",
+    imageUrl: "https://placehold.co/100x80/388E3C/FFFFFF?text=Sembilang",
+    linkDetail: "/konservasi/sembilang"
+  },
+  {
+    lat: -2.2667, lng: 99.6167, nama: "Danau Toba",
+    deskripsi: "Danau vulkanik terbesar dengan flora-fauna endemik air tawar.",
+    imageUrl: "https://placehold.co/100x80/0288D1/FFFFFF?text=Toba",
+    linkDetail: "/flora-fauna/danau-toba"
+  },
+  {
+    lat: -7.8014, lng: 110.3647, nama: "Gunung Merapi",
+    deskripsi: "Wilayah konservasi pegunungan dengan vegetasi khas.",
+    imageUrl: "https://placehold.co/100x80/F57C00/FFFFFF?text=Merapi",
+    linkDetail: "/konservasi/merapi"
+  },
+  {
+    lat: -1.495, lng: 124.836, nama: "Taman Nasional Bogani Nani Wartabone",
+    deskripsi: "Habitat Maleo dan spesies burung langka lainnya.",
+    imageUrl: "https://placehold.co/100x80/5D4037/FFFFFF?text=Maleo",
+    linkDetail: "/fauna/maleo"
+  },
+  {
+    lat: -4.222, lng: 137.056, nama: "Pegunungan Cyclops Papua",
+    deskripsi: "Flora dan fauna unik khas Papua bagian timur.",
+    imageUrl: "https://placehold.co/100x80/00796B/FFFFFF?text=Cyclops",
+    linkDetail: "/flora-fauna/cyclops"
+  },
+  {
+    lat: -0.1769, lng: 117.3563, nama: "Taman Nasional Kutai",
+    deskripsi: "Salah satu kawasan penting pelestarian hutan tropis Kalimantan.",
+    imageUrl: "https://placehold.co/100x80/8D6E63/FFFFFF?text=Kutai",
+    linkDetail: "/konservasi/kutai"
+  },
+  {
+    lat: -3.8594, lng: 126.7555, nama: "Pulau Seram",
+    deskripsi: "Dikenal dengan kakatua seram dan anggrek endemik.",
+    imageUrl: "https://placehold.co/100x80/BA68C8/FFFFFF?text=Seram",
+    linkDetail: "/fauna/kakatua-seram"
+  },
+  {
+    lat: -8.1667, lng: 124.0167, nama: "Pulau Flores",
+    deskripsi: "Tumbuhan langka dan budaya lokal menyatu dalam ekosistem.",
+    imageUrl: "https://placehold.co/100x80/9E9D24/FFFFFF?text=Flores",
+    linkDetail: "/flora/flores"
+  },
+  {
+    lat: -1.3364, lng: 100.5722, nama: "Taman Nasional Kerinci Seblat",
+    deskripsi: "Rumah Harimau Sumatera dan Rafflesia arnoldii.",
+    imageUrl: "https://placehold.co/100x80/EF5350/FFFFFF?text=Kerinci",
+    linkDetail: "/fauna/harimau-sumatera"
+  },
+  {
+    lat: 1.5029, lng: 124.9244, nama: "Tangkoko Batuangus",
+    deskripsi: "Habitat monyet hitam Sulawesi (Yaki) dan burung rangkong.",
+    imageUrl: "https://placehold.co/100x80/455A64/FFFFFF?text=Yaki",
+    linkDetail: "/fauna/yaki"
+  }
+];
+
 
   constructor(private cdr: ChangeDetectorRef ) {}
 

@@ -1,41 +1,61 @@
 <div class="profile-card" *ngIf="profile; else noProfile">
   <h2 class="title">👤 Profil Saya</h2>
-
   
+  <!-- Tampilan Info (Mode Baca) -->
   <div *ngIf="!editMode; else editForm">
+    <div class="avatar-container">
+      <img [src]="profile.avatarUrl || 'https://placehold.co/150x150/EFEFEF/3A3A3A?text=Foto'" alt="Foto Profil" class="avatar-image">
+    </div>
+
     <div class="profile-info">
       <p><strong>🆔 Username:</strong> {{ profile.username }}</p>
-      <p><strong>📛 Full Name:</strong> {{ profile.fullName }}</p>
+      <p><strong>📛 Nama Lengkap:</strong> {{ profile.fullName }}</p>
       <p><strong>📧 Email:</strong> {{ profile.email }}</p>
       <p><strong>📝 Bio:</strong> {{ profile.bio || '-' }}</p>
-      <p><strong>🎂 Date of Birth:</strong> {{ profile.dateOfBirth | date:'longDate' || '-' }}</p>
-      <p><strong>👀 Visit Count:</strong> {{ profile.visitCount || 0 }}</p>
-      <p><strong>⏱️ Total Visit Duration:</strong> {{ profile.totalVisitDuration || 0 }} detik</p>
+      
+      <p>
+        <strong>🎂 Tanggal Lahir:</strong> 
+        <span *ngIf="profile.dateOfBirth">
+          {{ ($any(profile.dateOfBirth).toDate ? $any(profile.dateOfBirth).toDate() : profile.dateOfBirth) | date:'longDate' }}
+        </span>
+        <span *ngIf="!profile.dateOfBirth">-</span>
+      </p>
+
+      <p><strong>👀 Jumlah Kunjungan:</strong> {{ profile.visitCount || 0 }}</p>
     </div>
 
     <button class="btn edit-btn" (click)="toggleEdit()">✏️ Ubah Profil</button>
   </div>
 
+  <!-- Form Edit -->
   <ng-template #editForm>
     <form class="edit-form" (ngSubmit)="saveProfile()">
+
+      <!-- Upload Avatar -->
+      <div class="avatar-container">
+        <img [src]="imagePreviewUrl || profile.avatarUrl || 'https://placehold.co/150x150/EFEFEF/3A3A3A?text=Pilih'" alt="Pratinjau Foto" class="avatar-image">
+      </div>
+      <label for="avatar-input" class="avatar-upload-label">
+        🖼️ Ganti Foto Profil
+      </label>
+      <input id="avatar-input" type="file" accept="image/*" (change)="onFileSelected($event)" />
+
+      <!-- Input Fields Lainnya -->
       <label>
         Username:
         <input type="text" [(ngModel)]="editedProfile.username" name="username" />
       </label>
-
       <label>
-        Full Name:
+        Nama Lengkap:
         <input type="text" [(ngModel)]="editedProfile.fullName" name="fullName" />
       </label>
-
       <label>
         Bio:
         <textarea rows="3" [(ngModel)]="editedProfile.bio" name="bio"></textarea>
       </label>
-
       <label>
-        Date of Birth:
-        <input type="date" [(ngModel)]="editedProfile.dateOfBirth" name="dateOfBirth" />
+        Tanggal Lahir:
+        <input type="date" [ngModel]="($any(editedProfile.dateOfBirth)?.toDate ? $any(editedProfile.dateOfBirth).toDate() : editedProfile.dateOfBirth) | date:'yyyy-MM-dd'" (ngModelChange)="editedProfile.dateOfBirth = $event" name="dateOfBirth" />
       </label>
 
       <div class="button-group">
@@ -52,3 +72,22 @@
 <ng-template #noProfile>
   <p>⚠️ Profil belum tersedia.</p>
 </ng-template>
+
+<hr />
+
+<h3>📚 Riwayat Artikel yang Dibaca</h3>
+
+<div *ngIf="loadingReadArticles">Memuat riwayat artikel...</div>
+
+<ul *ngIf="!loadingReadArticles && readArticles.length > 0">
+  <li *ngFor="let article of readArticles">
+    <a [routerLink]="['/articles', article.articleId]">{{ article.title }}</a>
+    <small>(dibaca pada: {{ article.dateRead | date:'medium' }})</small>
+  </li>
+</ul>
+
+<div *ngIf="!loadingReadArticles && readArticles.length === 0">
+  <p>7 Fakta Menarik Hutan Mangrove Indonesia</p>
+  <p>10 Flora dan Fauna Endemik Indonesia yang Unik</p>
+</div>
+

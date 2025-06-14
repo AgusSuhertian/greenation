@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { collectionData } from '@angular/fire/firestore';
 import {
   Auth,
   authState,
@@ -8,7 +9,8 @@ import {
   signOut,
   User,
   UserCredential,
-  updateProfile
+  updateProfile,
+  deleteUser
 } from '@angular/fire/auth';
 import {
   Firestore,
@@ -16,7 +18,13 @@ import {
   setDoc,
   getDoc,
   serverTimestamp,
-  Timestamp
+  Timestamp,
+  collection,
+  query,
+  orderBy,
+  limit,
+  addDoc,
+  getDocs
 } from '@angular/fire/firestore';
 import {
   Storage,
@@ -24,12 +32,19 @@ import {
   uploadBytes,
   getDownloadURL
 } from '@angular/fire/storage';
-import { FirebaseError } from 'firebase/app';
 import { BehaviorSubject, Observable, of, from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { UserProfile } from './models/user-profile.model';
 
-@Injectable({ providedIn: 'root' })
+export interface ReadArticle {
+  articleId: string;
+  title: string;
+  dateRead: Date;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   private auth: Auth = inject(Auth);
   private firestore: Firestore = inject(Firestore);
@@ -42,31 +57,29 @@ export class AuthService {
 
   constructor(private router: Router) {
     authState(this.auth).pipe(
-      tap(user => console.log('[AuthService] authState changed:', user)),
       switchMap(user => {
         this.currentUser.next(user);
         if (user) {
           return from(this.fetchUserProfile(user.uid)).pipe(
-            switchMap(profile => {
-              const now = new Date();
-              const visitCount = (profile?.visitCount || 0) + 1;
-              return from(this.updateUserProfile(user.uid, {
-                sessionStart: now,
-                lastActiveAt: now,
-                visitCount
-              }));
-            })
+            tap(() => this._updateUserSessionStats(user.uid))
           );
         } else {
           this.currentUserProfile.next(null);
           return of(null);
         }
       })
-    ).subscribe(() => {
-      if (!this.currentUser.value) {
-        this.router.navigate(['/login']);
-      }
-    });
+    ).subscribe();
+  }
+
+  private async _updateUserSessionStats(userId: string): Promise<void> {
+    const userProfileRef = doc(this.firestore, `user_profiles/${userId}`);
+    const profile = this.currentUserProfile.getValue();
+    const visitCount = (profile?.visitCount || 0) + 1;
+    await setDoc(userProfileRef, {
+      sessionStart: serverTimestamp(),
+      lastActiveAt: serverTimestamp(),
+      visitCount: visitCount,
+    }, { merge: true });
   }
 
   private normalizeTimestamps(profile: any): UserProfile {
@@ -79,11 +92,6 @@ export class AuthService {
       else if (typeof val === 'string') profile[field] = new Date(val);
     }
     return profile as UserProfile;
-  }
-
-  private calculateDurationInSeconds(start: Date, end: Date): number {
-    const ms = end.getTime() - start.getTime();
-    return Math.floor(ms / 1000);
   }
 
   private async uploadAvatar(userId: string, file: File): Promise<string> {
@@ -116,15 +124,6 @@ export class AuthService {
     }
   }
 
-  async login(creds: { email: string; password: string }): Promise<UserCredential> {
-    try {
-      return await signInWithEmailAndPassword(this.auth, creds.email, creds.password);
-    } catch (error) {
-      console.error('[AuthService] login error:', error);
-      throw error;
-    }
-  }
-
   async register(creds: {
     email: string;
     password: string;
@@ -133,78 +132,72 @@ export class AuthService {
     dateOfBirth?: Date;
     avatarFile?: File;
   }): Promise<UserCredential> {
-    if (!creds.email || !creds.password) throw new Error('Email dan password wajib diisi.');
-    if (creds.password.length < 6) throw new Error('Password minimal harus 6 karakter.');
-    try {
-      const userCredential = await createUserWithEmailAndPassword(this.auth, creds.email, creds.password);
-      const user = userCredential.user;
-      if (user && (creds.fullName || creds.username)) {
-        await updateProfile(user, {
-          displayName: creds.fullName || creds.username
-        });
-      }
+    const userCredential = await createUserWithEmailAndPassword(this.auth, creds.email, creds.password);
+    const user = userCredential.user;
 
-      let avatarUrl: string | undefined;
-      if (user && creds.avatarFile) {
-        try {
-          avatarUrl = await this.uploadAvatar(user.uid, creds.avatarFile);
-        } catch (e) {
-          console.warn('[AuthService] upload avatar failed:', e);
-        }
-      }
-
-      if (user) {
-        const profile: Partial<UserProfile> = {
-          username: creds.username?.trim() || user.email?.split('@')[0],
-          fullName: creds.fullName?.trim() || '',
-          email: user.email ?? undefined,
-          avatarUrl,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          dateOfBirth: creds.dateOfBirth ?? undefined
-        };
-        await setDoc(doc(this.firestore, `user_profiles/${user.uid}`), profile);
-      }
-
-      return userCredential;
-    } catch (error) {
-      console.error('[AuthService] register error:', error);
-      throw error;
+    let avatarUrl: string | null = null;
+    if (user && creds.avatarFile) {
+      avatarUrl = await this.uploadAvatar(user.uid, creds.avatarFile);
     }
+
+    const profileData: { [key: string]: any } = {
+      username: creds.username || user.email?.split('@')[0],
+      fullName: creds.fullName || '',
+      email: user.email,
+      avatarUrl: avatarUrl,
+      dateOfBirth: creds.dateOfBirth || null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    Object.keys(profileData).forEach(key => {
+      if (profileData[key] === undefined) {
+        delete profileData[key];
+      }
+    });
+
+    await setDoc(doc(this.firestore, `user_profiles/${user.uid}`), profileData);
+    return userCredential;
+  }
+
+  async updateUserProfile(
+    userId: string,
+    profileData: Partial<UserProfile> & { avatarFile?: File }
+  ): Promise<void> {
+    if (!userId) throw new Error('User ID diperlukan.');
+
+    const { avatarFile, ...textData } = profileData;
+    const dataToUpdate: { [key: string]: any } = { ...textData };
+
+    if (avatarFile) {
+      try {
+        const newAvatarUrl = await this.uploadAvatar(userId, avatarFile);
+        dataToUpdate['avatarUrl'] = newAvatarUrl;
+      } catch (error) {
+        console.error('[AuthService] Gagal mengunggah avatar baru:', error);
+        throw new Error('Gagal mengunggah foto profil.');
+      }
+    }
+
+    if (dataToUpdate['dateOfBirth']) {
+      dataToUpdate['dateOfBirth'] = Timestamp.fromDate(new Date(dataToUpdate['dateOfBirth']));
+    }
+
+    dataToUpdate['updatedAt'] = serverTimestamp();
+
+    const userProfileRef = doc(this.firestore, `user_profiles/${userId}`);
+    await setDoc(userProfileRef, dataToUpdate, { merge: true });
+
+    await this.fetchUserProfile(userId);
+  }
+
+  async login(creds: { email: string; password: string }): Promise<UserCredential> {
+    return await signInWithEmailAndPassword(this.auth, creds.email, creds.password);
   }
 
   async logout(): Promise<void> {
-    try {
-      const userId = this.currentUser.value?.uid;
-      const now = new Date();
-      if (userId && this.currentUserProfile.value?.sessionStart) {
-        const raw = this.currentUserProfile.value.sessionStart;
-        let sessionStart: Date;
-
-        if (raw instanceof Date) sessionStart = raw;
-        else if (raw instanceof Timestamp) sessionStart = raw.toDate();
-        else if (typeof raw === 'string' || typeof raw === 'number') sessionStart = new Date(raw);
-        else {
-          console.warn('sessionStart tidak valid:', raw);
-          sessionStart = new Date();
-        }
-
-        const duration = this.calculateDurationInSeconds(sessionStart, now);
-        const totalDuration = (this.currentUserProfile.value.totalVisitDuration || 0) + duration;
-
-        await this.updateUserProfile(userId, {
-          sessionEnd: now,
-          lastVisitDuration: duration,
-          totalVisitDuration: totalDuration,
-          lastActiveAt: now
-        });
-      }
-
-      await signOut(this.auth);
-    } catch (error) {
-      console.error('[AuthService] logout error:', error);
-      throw error;
-    }
+    await signOut(this.auth);
+    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
@@ -215,33 +208,59 @@ export class AuthService {
     return this.currentUser.value;
   }
 
-  async updateUserProfile(userId: string, profileData: Partial<UserProfile>): Promise<void> {
-    if (!userId) throw new Error('User ID diperlukan.');
-    const ref = doc(this.firestore, `user_profiles/${userId}`);
-    const dataToUpdate: { [key: string]: any } = {};
+  getCurrentUserId(): string | null {
+    return this.currentUser.value?.uid ?? null;
+  }
 
-    const fields = [
-      'username', 'fullName', 'avatarUrl', 'bio', 'dateOfBirth',
-      'sessionStart', 'sessionEnd', 'visitCount',
-      'lastVisitDuration', 'totalVisitDuration', 'lastActiveAt'
-    ];
+  async updateDisplayName(displayName: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) throw new Error('Tidak ada pengguna yang login.');
+    await updateProfile(user, { displayName });
+    this.currentUser.next(user);
+  }
 
-    for (const key of fields) {
-      if (profileData[key as keyof UserProfile] !== undefined) {
-        dataToUpdate[key] = profileData[key as keyof UserProfile];
-      }
-    }
+  async deleteAccount(): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) throw new Error('Tidak ada pengguna yang login.');
 
-    dataToUpdate['updatedAt'] = serverTimestamp();
+    await deleteUser(user);
+    this.currentUser.next(null);
+    this.currentUserProfile.next(null);
+    this.router.navigate(['/register']);
+  }
 
-    try {
-      await setDoc(ref, dataToUpdate, { merge: true });
-      if (this.currentUser.value?.uid === userId) {
-        await this.fetchUserProfile(userId);
-      }
-    } catch (error) {
-      console.error('[AuthService] updateUserProfile error:', error);
-      throw error;
-    }
+  // ==========================
+  // Riwayat Artikel Dibaca
+  // ==========================
+
+  getReadArticles(): Observable<ReadArticle[]> {
+  const userId = this.getCurrentUserId();
+  if (!userId) return of([]);
+
+  const readArticlesRef = collection(this.firestore, `user_profiles/${userId}/read_articles`);
+  const q = query(readArticlesRef, orderBy('dateRead', 'desc'), limit(20));
+
+  return collectionData(q, { idField: 'id' }).pipe(
+    map(articles =>
+      articles.map((data: any) => ({
+        articleId: data.articleId,
+        title: data.title,
+        dateRead: data.dateRead?.toDate ? data.dateRead.toDate() : new Date(data.dateRead),
+      }))
+    )
+  );
+}
+
+  async addReadArticle(articleId: string, title: string): Promise<void> {
+    const userId = this.getCurrentUserId();
+    if (!userId) throw new Error('User belum login');
+
+    const readArticlesRef = collection(this.firestore, `user_profiles/${userId}/read_articles`);
+
+    await addDoc(readArticlesRef, {
+      articleId,
+      title,
+      dateRead: serverTimestamp()
+    });
   }
 }

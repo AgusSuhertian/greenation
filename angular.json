@@ -42,13 +42,15 @@
               "buildOptimizer": true
             },
             "development": {
-              "optimization": false,
-              "sourceMap": true,
-              "namedChunks": true,
-              "aot": false,
-              "vendorChunk": true,
-              "buildOptimizer": false
-            }
+  "optimization": false,
+  "buildOptimizer": false,
+  "fileReplacements": [
+    {
+      "replace": "src/environments/environment.ts",
+      "with": "src/environments/environment.development.ts"
+    }
+  ]
+}
           },
           "defaultConfiguration": "development"
         },

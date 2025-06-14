@@ -1,0 +1,46 @@
+<div class="forum-container">
+  <h2>Forum Diskusi</h2>
+
+  <!-- Form tambah post -->
+  <div class="post-form">
+    <textarea [(ngModel)]="newPostContent" placeholder="Apa yang Anda pikirkan?"></textarea>
+    <button (click)="addPost()">Post</button>
+  </div>
+
+  <!-- Daftar postingan -->
+  <div *ngFor="let post of posts" class="post-card">
+    <div class="post-header">
+      <strong>{{ post.userName }}</strong>
+      <small>{{ (post.timestamp?.toDate ? post.timestamp.toDate() : post.timestamp) | date:'short' }}</small>
+    </div>
+    <p class="post-content">{{ post.content }}</p>
+
+    <!-- Pastikan post.id ada sebelum menampilkan bagian komentar -->
+    <ng-container *ngIf="post.id">
+      <div class="comments-section">
+        <!-- Daftar Komentar -->
+        <div *ngFor="let comment of post.comments" class="comment">
+          <div class="comment-body">
+            <strong>{{ comment.userName }}</strong>: {{ comment.content }}
+          </div>
+          
+          <!-- Tombol Hapus: Muncul hanya jika user adalah pemilik & ID-nya valid -->
+          <button 
+            *ngIf="currentUserProfile && currentUserProfile.id === comment.authorId && comment.id" 
+            (click)="handleDeleteComment(post.id, comment.id)"
+            class="delete-comment-btn"
+            title="Hapus komentar">
+            <!-- Ikon SVG Sampah -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </button>
+        </div>
+
+        <!-- Form tambah komentar -->
+        <div class="comment-form">
+          <input type="text" [(ngModel)]="newCommentContent[post.id]" placeholder="Tulis komentar..." (keyup.enter)="addComment(post.id)">
+          <button (click)="addComment(post.id)">Kirim</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

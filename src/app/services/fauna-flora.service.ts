@@ -182,14 +182,13 @@ export class FaunaFloraService {
     );
   }
 
-  // Untuk mengambil daftar Fauna tanpa query (misal 20 data aktif dan species)
 getAllFauna(perPage: number = 20): Observable<Fauna[]> {
   const params = new HttpParams()
     .set('is_active', 'true')
     .set('rank', 'species')
     .set('locale', 'id-ID')
     .set('preferred_place_id', '6903')
-    .set('taxon_id', '1')  // taxon_id untuk Fauna
+    .set('taxon_id', '1')  
     .set('per_page', perPage.toString());
 
   console.log(`[FaunaFloraService] Getting all fauna with params: ${params.toString()}`);
@@ -240,14 +239,13 @@ getAllFauna(perPage: number = 20): Observable<Fauna[]> {
   );
 }
 
-// Untuk mengambil daftar Flora tanpa query (misal 20 data aktif dan species)
 getAllFlora(perPage: number = 20): Observable<Flora[]> {
   const params = new HttpParams()
     .set('is_active', 'true')
     .set('rank', 'species')
     .set('locale', 'id-ID')
     .set('preferred_place_id', '6903')
-    .set('taxon_id', '47126')  // taxon_id untuk Flora
+    .set('taxon_id', '47126') 
     .set('per_page', perPage.toString());
 
   console.log(`[FaunaFloraService] Getting all flora with params: ${params.toString()}`);

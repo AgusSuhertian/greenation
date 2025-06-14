@@ -1,8 +1,10 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../../auth.service';
+import { Observable } from 'rxjs';
+
+import { AuthService } from '../../auth.service'; 
+import { UserProfile } from '../../models/user-profile.model'; 
 
 @Component({
   selector: 'app-navbar',
@@ -11,23 +13,18 @@ import { AuthService } from '../../auth.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
   isMenuOpen = false;
-  isUserLoggedIn = false;
-  private authSub!: Subscription;
 
-  authService = inject(AuthService);
+  isLoggedIn$: Observable<boolean>;
+  userProfile$: Observable<UserProfile | null>;
 
-  constructor(private router: Router) {}
-
-  ngOnInit(): void {
-    this.authSub = this.authService.isLoggedIn$.subscribe(status => {
-      this.isUserLoggedIn = status;
-    });
+  constructor(private authService: AuthService, private router: Router) {
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
+    this.userProfile$ = this.authService.currentUserProfile$;
   }
 
-  ngOnDestroy(): void {
-    this.authSub.unsubscribe();
+  ngOnInit(): void {
   }
 
   logout(): void {

@@ -1,3 +1,4 @@
+/* General Navbar Structure */
 .navbar {
   background-color: #ffffff;
   padding: 1rem 2rem;
@@ -25,6 +26,7 @@
   text-decoration: none;
 }
 
+/* Navigation Links Container */
 .navbar-nav {
   list-style: none;
   display: flex;
@@ -36,6 +38,8 @@
 
 .navbar-nav li {
   margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 .nav-link {
@@ -63,6 +67,35 @@
   background-color: #a5d6a7;
   border-radius: 2px;
 }
+
+/* User Actions Section (Avatar & Logout) */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* Jarak antara foto profil dan tombol logout */
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
 .btn-logout {
   background-color: #2e7d32;
   border: none;
@@ -78,6 +111,7 @@
   background-color: #1b5e20;
 }
 
+/* Responsive Toggler (Hamburger Menu) */
 .navbar-toggler {
   display: none;
   background: none;
@@ -87,7 +121,8 @@
   color: #2e7d32;
 }
 
-@media (max-width: 768px) {
+
+@media (max-width: 992px) { 
   .navbar-toggler {
     display: block;
   }
@@ -95,11 +130,12 @@
   .navbar-nav {
     display: none;
     flex-direction: column;
+    align-items: flex-start; 
     background-color: #f1f8e9;
     width: 100%;
     padding: 1rem;
     position: absolute;
-    top: 70px;
+    top: 70px; 
     left: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
@@ -110,14 +146,18 @@
 
   .nav-link {
     padding: 0.75rem 1rem;
+    width: 100%; 
     border-bottom: 1px solid #dcedc8;
   }
-
-  .nav-link:last-child {
+  
+  .navbar-nav li:last-child .nav-link {
     border-bottom: none;
   }
-
-  .btn-logout {
-    margin-top: 1rem;
+  
+  .user-actions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
   }
 }

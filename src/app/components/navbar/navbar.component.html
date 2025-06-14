@@ -13,6 +13,9 @@
         <a routerLink="/home" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Home</a>
       </li>
       <li>
+        <a routerLink="/forum" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Keluh-Kesah</a>
+      </li>
+      <li>
         <a routerLink="/flora" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Flora</a>
       </li>
       <li>
@@ -21,17 +24,24 @@
       <li>
         <a routerLink="/peta-interaktif" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Peta</a>
       </li>
-
-      <li *ngIf="isUserLoggedIn">
+      <li>
         <a routerLink="/artikel" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Artikel</a>
       </li>
-      <li *ngIf="isUserLoggedIn">
-        <a routerLink="/profil" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Profil</a>
+      <li>
+        <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Tentang Kami</a>
       </li>
-      <li *ngIf="!isUserLoggedIn">
+      
+      <li *ngIf="!(isLoggedIn$ | async)">
         <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Login</a>
       </li>
-      <li *ngIf="isUserLoggedIn">
+      
+      <li *ngIf="isLoggedIn$ | async" class="user-actions">
+        <a *ngIf="userProfile$ | async as profile" routerLink="/profil" class="profile-link" (click)="closeMenu()">
+          <img 
+            [src]="profile?.avatarUrl || 'https://placehold.co/40x40/EFEFEF/3A3A3A?text=U'" 
+            alt="Foto Profil" 
+            class="profile-avatar">
+        </a>
         <a (click)="logout()" style="cursor: pointer;" class="nav-link btn btn-logout">Logout</a>
       </li>
     </ul>

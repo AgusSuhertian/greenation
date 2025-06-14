@@ -1,130 +1,248 @@
-/* Background utama di seluruh halaman */
+:root {
+    --primary-green: #2E7D32;
+    --dark-green: #1b5e20;
+    --light-green: #c8e6c9;
+    --background-light: #f8f9fa; 
+    --text-dark: #fffefe;
+    --text-light: #fefefe;
+    --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
 body {
-  background: url('../../../assets/forest-banner.jpg') no-repeat center center / cover;
-  background-attachment: fixed;
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+}
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-light);
+    height: 70vh; 
+    min-height: 450px;
+    position: relative;
+    background-image: url('https://images.pexels.com/photos/38136/pexels-photo-38136.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; 
 }
 
-/* Hero section */
-.hero {
-  background: url('../../../assets/forest-banner.jpg') no-repeat center center / cover;
-  height: 80vh;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-  font-family: 'Montserrat', sans-serif;
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(46, 125, 50, 0.6), rgba(0, 0, 0, 0.4));
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(46, 125, 50, 0.5); /* overlay hijau transparan */
-  z-index: 1;
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 2.5em;
+    background: rgba(207, 200, 200, 0.4);
+    border-radius: 12px;
+    max-width: 650px;
+    box-shadow: 0 8px 20px rgba(255, 250, 250, 0.3);
 }
 
-.hero-text {
-  position: relative;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 3em 2.5em;
-  border-radius: 12px;
-  max-width: 600px;
-  z-index: 2;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+.hero-content h1 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5em 0;
+    line-height: 1.2;
 }
 
-.hero-text h1 {
-  font-size: 3rem;
-  margin-bottom: 0.5em;
-  font-weight: 700;
-  line-height: 1.2;
+.hero-content p {
+    font-size: 1.15rem;
+    margin: 0 auto 2rem auto;
 }
 
-/* Tombol */
-.btn {
-  background-color: #2e7d32;
-  color: white;
-  padding: 0.75em 2em;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  display: inline-block;
-  transition: background-color 0.3s ease;
+.hero-button {
+    background-color: #ffffff;
+    color: var(--primary-green);
+    padding: 14px 28px;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 50px;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-.btn:hover {
-  background-color: #1b5e20;
+.hero-button:hover {
+    background-color: var(--light-green);
+    transform: translateY(-3px);
 }
 
-.features {
-  background: url('../../../assets/forest-banner.jpg') no-repeat center center / cover;
-  display: flex;
-  justify-content: space-between;
-  padding: 3em 2em;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 1.5em;
-  flex-wrap: wrap;
+.features-section {
+    padding: 80px 20px;
+    background-color: #ffffff;
+    text-align: center;
 }
 
-/* Card pada fitur */
-.card {
-  background: white;
-  padding: 2em 1.5em;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-  width: 30%;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.section-title {
+    font-size: 2.5rem;
+    color: var(--primary-green);
+    margin-bottom: 1rem;
+    font-weight: 700;
 }
 
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Section artikel */
-.articles {
-  padding: 3em 1.5em;
-  background: #ffffff;
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: left;
-  font-family: 'Montserrat', sans-serif;
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.articles h2 {
-  color: #2e7d32;
-  margin-bottom: 1em;
-  font-weight: 700;
-  font-size: 2rem;
+.feature-card {
+    background: #ffffff;
+    padding: 2em 1.5em;
+    border-radius: 12px;
+    border-left: 5px solid var(--primary-green);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.article-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.8em;
-  margin-top: 1em;
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
-.article-card {
-  background: #f9fbe7;
-  padding: 1.5em 1.2em;
-  border-radius: 12px;
-  border-left: 5px solid #2e7d32;
-  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.1);
-  transition: box-shadow 0.3s ease;
+.feature-card svg {
+    width: 50px;
+    height: 50px;
+    fill: var(--primary-green);
+    margin-bottom: 1rem;
 }
 
-.article-card:hover {
-  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.2);
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.feature-card p {
+    line-height: 1.6;
+    color: #666;
+}
+
+.video-section {
+    padding: 80px 20px;
+    background-color: var(--background-light);
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.video-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.youtube-container {
+    position: relative;
+    padding-bottom: 56.25%; 
+    height: 0;
+    overflow: hidden;
+}
+
+.youtube-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.video-info {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.video-info h3 {
+    font-size: 1.3rem;
+    margin: 0 0 8px 0;
+}
+
+.video-info p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.cta-section {
+    padding: 80px 20px;
+    background-color: var(--dark-green);
+    color: var(--text-light);
+    text-align: center;
+}
+
+.cta-section h2 {
+    font-size: 2.5rem;
+    margin: 0 0 1rem 0;
+}
+
+.cta-section p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-button {
+    background-color: var(--text-light);
+    color: var(--primary-green);
+    padding: 14px 28px;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 50px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-button:hover {
+    background-color: var(--light-green);
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+    .hero-content p {
+        font-size: 1.05rem;
+    }
+    .section-title {
+        font-size: 2rem;
+    }
 }

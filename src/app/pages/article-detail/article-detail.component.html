@@ -12,7 +12,8 @@
       class="article-image"
       (error)="article.imageUrl = null"
     />
-    <img *ngIf="imageLoadError" src="assets/image-placeholder.png" alt="Placeholder" class="article-image" />
+    <img [src]="article.imageUrl" (error)="imageLoadError = true" *ngIf="!imageLoadError">
+ <img *ngIf="imageLoadError" src="assets/image-placeholder.png">
 
     <p *ngIf="article.summary" class="summary">{{ article.summary }}</p>
 
